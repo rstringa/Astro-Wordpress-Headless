@@ -1,6 +1,7 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
 import Section1 from "../components/acf/section-1.astro";
+import Section2 from "../components/acf/section-2.astro";
 import Carousel from "../components/acf/carousel.astro";
 
 const {slug} = Astro.params
@@ -46,5 +47,10 @@ const data = await FlexibleACF();
          ) 
          : null
      }
+
+     
+    <h2>Sections</h2>
+    <Section1/>  
+    <Section2/>
   </div>
 </MainLayout>  
