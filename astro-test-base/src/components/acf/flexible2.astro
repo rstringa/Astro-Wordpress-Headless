@@ -1,0 +1,76 @@
+---
+const { pageId } = Astro.props
+import "../acf/flexible.css"
+
+
+const PUBLIC_WORDPRESS_API_URL = import.meta.env.PUBLIC_WORDPRESS_API_URL;
+
+async function FlexibleACF() {
+  const FlexibleACF = await fetch(`${PUBLIC_WORDPRESS_API_URL}`, {
+    method: "post",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: `{
+        page(id: "${pageId}", idType: DATABASE_ID) {
+    homeFlexible {
+      flexible {
+        ... on Page_Homeflexible_Flexible_Contenido1 {
+          texto
+          imagen {
+            sourceUrl
+          }
+          fieldGroupName
+        }
+        ... on Page_Homeflexible_Flexible_Contenido2 {
+          texto
+          titulo
+          fotos {
+            sourceUrl
+          }
+          fieldGroupName
+        }
+      }
+    }
+  }
+            }
+            `,
+    }),
+  });
+  const { data } = await FlexibleACF.json();
+  return data;
+}
+
+const data = await FlexibleACF();
+let outputHTML = "";
+for (const flexibleGroup of data.page.homeFlexible.flexible) {
+
+  switch (flexibleGroup.fieldGroupName) {
+    case "Page_Homeflexible_Flexible_Contenido1":
+      outputHTML += `
+          <div class="flexible-1 box"> 
+            <p>${flexibleGroup?.texto ? flexibleGroup?.texto : ""}</p>   
+          </div>
+      `;
+      
+      break;
+
+    case "Page_Homeflexible_Flexible_Contenido2":
+      outputHTML += `
+          <div class="flexible-2 box"> 
+            <h4>${flexibleGroup?.titulo ? flexibleGroup?.titulo : ""}</h4>
+            <p>${flexibleGroup?.texto ? flexibleGroup?.texto : ""}</p>   
+          </div>
+      `;
+      
+      break;
+
+    default:
+      break;
+  }
+}
+
+---
+
+<div class="flexible-content" data-page-id={pageId}> 
+  <div set:html={outputHTML}></div>
+</div>

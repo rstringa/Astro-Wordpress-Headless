@@ -1,0 +1,18 @@
+---
+---
+<form id="miFormulario">
+    <input type="search" placeholder="...Buscar" id="campoBusqueda">
+</form>	 
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const formulario = document.getElementById("miFormulario");
+		const campoBusqueda = document.querySelector("#campoBusqueda") as HTMLInputElement;
+
+		formulario.addEventListener("submit", function (event) {
+			event.preventDefault();
+			const valorBusqueda = campoBusqueda.value;
+			window.location.href = "/resultados?s=" + encodeURIComponent(valorBusqueda);
+		})
+	})
+</script>

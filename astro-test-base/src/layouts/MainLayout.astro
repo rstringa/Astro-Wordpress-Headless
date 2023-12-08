@@ -1,0 +1,50 @@
+---
+const {title, description} = Astro.props;
+import Form from "../components/Form.astro"
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<meta name="description" content={ description || " "}>
+		<!-- <link rel="stylesheet" href="../styles/wp-styles.css" /> -->
+	</head>
+	<body>
+		<main>
+			<nav>
+				<a href={Astro.url.origin}>Inicio</a>
+				<a href=`${Astro.url.origin}/blog`>Blog</a>
+				<a href=`${Astro.url.origin}/blog/categorias/categoria-1`>Blog Categoria 1</a>
+				<a href=`${Astro.url.origin}/carousel`>Carousel</a>
+				<a href=`${Astro.url.origin}/pagina-2`>Pagina 2</a>
+				<a href=`${Astro.url.origin}/acf`>ACF</a>
+				<a href=`${Astro.url.origin}/contacto`>Contacto</a>
+			</nav>
+			<Form />
+			<slot></slot>
+		</main>
+	</body>
+</html>
+
+
+<style>
+	body {
+		font-family: 'Open Sans', sans-serif;
+		font-size: 18px;
+	}
+	main {
+		width:100%;
+		max-width: 1024px;
+		margin:auto;
+	}
+	nav {
+		margin:20px;
+	}
+	nav a {
+		margin:5px 15px;
+	}
+</style>

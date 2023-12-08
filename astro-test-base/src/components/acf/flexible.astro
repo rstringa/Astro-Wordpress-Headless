@@ -1,0 +1,82 @@
+---
+const { pageId } = Astro.props;
+import "../acf/flexible.css";
+---
+
+<script>
+  const PUBLIC_WORDPRESS_API_URL = import.meta.env.PUBLIC_WORDPRESS_API_URL;
+  let output;
+  const pageId = document
+    .querySelector(".flexible-content")
+    .getAttribute("data-page-id");
+
+  async function FlexibleACF() {
+    const FlexibleACF = await fetch(`${PUBLIC_WORDPRESS_API_URL}`, {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: `{
+        page(id: "${pageId}", idType: DATABASE_ID) {
+    homeFlexible {
+      flexible {
+        ... on Page_Homeflexible_Flexible_Contenido1 {
+          texto
+          imagen {
+            sourceUrl
+          }
+          fieldGroupName
+        }
+        ... on Page_Homeflexible_Flexible_Contenido2 {
+          texto
+          titulo
+          fotos {
+            sourceUrl
+          }
+          fieldGroupName
+        }
+      }
+    }
+  }
+}
+            `,
+      }),
+    });
+    const { data } = await FlexibleACF.json();
+    return data;
+  }
+
+  async function renderContent() {
+    const data = await FlexibleACF();
+
+    const flexibleDiv = document.querySelector(".flexible-content");
+
+    for (const flexibleGroup of data.page.homeFlexible.flexible) {
+      switch (flexibleGroup.fieldGroupName) {
+        case "Page_Homeflexible_Flexible_Contenido1":
+          output = `
+          <div class="flexible-1 box"> 
+            <p>${flexibleGroup?.texto ? flexibleGroup?.texto : ""}</p>   
+          </div>
+      `;
+          flexibleDiv.innerHTML += output;
+          break;
+
+        case "Page_Homeflexible_Flexible_Contenido2":
+          output = `
+          <div class="flexible-2 box"> 
+            <h4>${flexibleGroup?.titulo ? flexibleGroup?.titulo : ""}</h4>
+            <p>${flexibleGroup?.texto ? flexibleGroup?.texto : ""}</p>   
+          </div>
+      `;
+          flexibleDiv.innerHTML += output;
+          break;
+
+        default:
+          break;
+      }
+    }
+  }
+  renderContent();
+</script>
+
+<div class="flexible-content" data-page-id=`${pageId}`></div>

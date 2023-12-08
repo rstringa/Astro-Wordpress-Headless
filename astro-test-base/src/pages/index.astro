@@ -1,0 +1,40 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import { CustomEndPoint } from './api/custom-endpoint.js';
+const href = Astro.url.href; 
+
+// Custom Endpoint
+let response = await CustomEndPoint();
+const data = await response.json();
+
+---
+<script>
+	const PUBLIC_WORDPRESS_API_URL = import.meta.env.PUBLIC_WORDPRESS_API_URL
+	const PUBLIC_WORDPRESS_API_URL_FETCH = new URL(PUBLIC_WORDPRESS_API_URL).origin;
+
+	window.onload = async function() {
+	  const response = await fetch(`${PUBLIC_WORDPRESS_API_URL_FETCH}/wp-json/wp/v2/posts?per_page=3&_embed`);
+	  const posts = await response.json();
+	  const postsContainer = document.getElementById('posts');
+	  posts.forEach(post => { 
+		const postElement = document.createElement('li');
+		postElement.innerHTML = `
+		  <a href=/blog/${post.slug}>
+			<h2>${post.title.rendered}</h2>
+			<p>${post.excerpt.rendered}</p>
+		  </a>
+		`;
+		postsContainer.appendChild(postElement);
+	  });
+	}
+	</script>
+<MainLayout title='Home Page' description="Descripcion del conetnido del Home">
+	<section>
+    <h1>Lista de Posts</h1>
+		<ul id="posts">
+			<!-- Contenido por fetch -->
+		</ul>
+	<h3>Custom Endpoint</h3>
+	<p>{data.greeting}</p>
+  </section>
+</MainLayout>	

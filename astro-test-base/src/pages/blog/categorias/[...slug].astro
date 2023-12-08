@@ -1,0 +1,45 @@
+---
+import MainLayout from "../../../layouts/MainLayout.astro"
+const {slug} = Astro.params
+const PUBLIC_WORDPRESS_API_URL = import.meta.env.PUBLIC_WORDPRESS_API_URL;
+
+async function ListCategories() {
+  const ListCategories = await fetch(`${PUBLIC_WORDPRESS_API_URL}`, {
+    method: "post",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: `{
+            categories(where: { slug:"${slug}" }) {
+                nodes {
+                name
+                slug
+                posts {
+                    nodes {
+                    title
+                    slug
+                    }
+                }
+                }
+            }
+    }
+            `,
+    }),
+  });
+  const { data } = await ListCategories.json();
+  return data;
+}
+
+const data = await ListCategories();
+
+---
+<MainLayout title={"Categorias - " + ( data.categories.nodes[0] && data.categories.nodes[0].name ? data.categories.nodes[0].name : "") }>
+  <h1>Categoria {data.categories.nodes[0]?.name}</h1>
+  <h2>Post</h2>
+
+  {
+    data.categories.nodes[0]?.posts?.nodes.map(item => (
+      <h3><a href={`/blog/${item.slug}`}>{item.title}</a></h3>
+    ))
+  }
+
+</MainLayout>
