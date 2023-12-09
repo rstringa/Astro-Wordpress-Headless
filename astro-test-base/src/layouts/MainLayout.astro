@@ -16,13 +16,13 @@ import Form from "../components/Form.astro"
 	<body>
 		<main>
 			<nav>
-				<a href={Astro.url.origin}>Inicio</a>
-				<a href=`${Astro.url.origin}/blog`>Blog</a>
-				<a href=`${Astro.url.origin}/blog/categorias/categoria-1`>Blog Categoria 1</a>
-				<a href=`${Astro.url.origin}/carousel`>Carousel</a>
-				<a href=`${Astro.url.origin}/pagina-2`>Pagina 2</a>
-				<a href=`${Astro.url.origin}/acf`>ACF</a>
-				<a href=`${Astro.url.origin}/contacto`>Contacto</a>
+				<a data-astro-prefetch="hover" href={Astro.url.origin}>Inicio</a>
+				<a data-astro-prefetch="hover" href=`${Astro.url.origin}/blog`>Blog</a>
+				<a data-astro-prefetch="hover" href=`${Astro.url.origin}/blog/categorias/categoria-1`>Blog Categoria 1</a>
+				<a data-astro-prefetch="hover" href=`${Astro.url.origin}/carousel`>Carousel</a>
+				<a data-astro-prefetch="hover" href=`${Astro.url.origin}/pagina-2`>Pagina 2</a>
+				<a data-astro-prefetch="hover" href=`${Astro.url.origin}/acf`>ACF</a>
+				<a data-astro-prefetch="hover" href=`${Astro.url.origin}/contacto`>Contacto</a>
 			</nav>
 			<Form />
 			<slot></slot>
