@@ -1,20 +1,23 @@
 ---
-export async function HomeACF() {
+const {slug} = Astro.props 
+
+
+async function HomeACF() {
   const HomeACF = await fetch(import.meta.env.WORDPRESS_API_URL, {
     method: "post",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       query: `{
-                page(id: "2", idType: DATABASE_ID) {
-    home {
-      text
-      title
-      image {
-        sourceUrl
-      }
-    }
-  }
+        pageBy(uri:"${slug}") {
+          home {
+            text
+            title
+            image {
+              sourceUrl
             }
+          }
+        }
+      }
             `,
     }),
   });
@@ -25,14 +28,15 @@ export async function HomeACF() {
 
 const data = await HomeACF();
 
-const section1 = data.page.home;
+const section1 = data?.pageBy?.home;
+
 ---
 
 <div class="section-1 box">
   <h2>Section 1</h2>
-  <h2>{section1.title}</h2>
-  <img src={section1.image.sourceUrl} alt={section1.image.title} />
-  <p>{section1.text}</p>
+  <h2>{section1?.title}</h2>
+  <img src={section1?.image?.sourceUrl} alt={section1?.image?.title} loading="lazy"/>
+  <p>{section1?.text}</p>
 </div>
 
 

@@ -11,39 +11,47 @@ import "../acf/flexible.css";
     .getAttribute("data-page-id");
 
   async function FlexibleACF() {
+    try {
     const FlexibleACF = await fetch(`${PUBLIC_WORDPRESS_API_URL}`, {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         query: `{
         page(id: "${pageId}", idType: DATABASE_ID) {
-    homeFlexible {
-      flexible {
-        ... on Page_Homeflexible_Flexible_Contenido1 {
-          texto
-          imagen {
-            sourceUrl
+            homeFlexible {
+              flexible {
+                ... on Page_Homeflexible_Flexible_Contenido1 {
+                  texto
+                  imagen {
+                    sourceUrl
+                  }
+                  fieldGroupName
+                }
+                ... on Page_Homeflexible_Flexible_Contenido2 {
+                  texto
+                  titulo
+                  fotos {
+                    sourceUrl
+                  }
+                  fieldGroupName
+                }
+              }
+            }
           }
-          fieldGroupName
         }
-        ... on Page_Homeflexible_Flexible_Contenido2 {
-          texto
-          titulo
-          fotos {
-            sourceUrl
-          }
-          fieldGroupName
-        }
-      }
-    }
-  }
-}
             `,
       }),
     });
-    const { data } = await FlexibleACF.json();
-    return data;
+      const { data } = await FlexibleACF.json();
+      console.log( data )
+      return data;
+  } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error; // Puedes manejar el error según tus necesidades
   }
+}
+
+
 
   async function renderContent() {
     const data = await FlexibleACF();
@@ -76,7 +84,9 @@ import "../acf/flexible.css";
       }
     }
   }
-  renderContent();
+  (async () => {
+    await renderContent();
+  })();
 </script>
 
 <div class="flexible-content" data-page-id=`${pageId}`></div>

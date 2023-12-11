@@ -1,17 +1,13 @@
 ---
+const {slug} = Astro.props 
 
----
-
-<script>
-  const PUBLIC_WORDPRESS_API_URL = import.meta.env.PUBLIC_WORDPRESS_API_URL;
-  //   import {WORDPRESS_API_URL} from "./api-url.js";
-  async function HomeACF() {
-    const HomeACF = await fetch(`${PUBLIC_WORDPRESS_API_URL}`, {
+async function HomeACF() {
+    const HomeACF = await fetch(import.meta.env.WORDPRESS_API_URL, {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         query: `{
-          page(id: "2", idType: DATABASE_ID) {
+          pageBy(uri:"${slug}") {
             homeSection2Repetible {
               homeSection2 {
                 image {
@@ -25,32 +21,23 @@
               }`,
       }),
     });
-
-    const { data } = await HomeACF.json();
-    return data;
+   
+  const { data } = await HomeACF.json();
+  return data;
   }
 
-  async function renderContent() {
-    const data = await HomeACF();
-    const section2Data = data.page.homeSection2Repetible.homeSection2;
-    const section2Div = document.querySelector(".content");
-    const section2DataRepetible = section2Data.map((item) => {
-      
-      let output = 
-      `
-          <div class="section-2 box">
-            <img src=${item?.image?.sourceUrl} alt=${item?.image?.title} loading="lazy"/>
-            <p>${item?.text}</p>   
-          </div>
-      `;
-      section2Div.innerHTML += output;
-    });
-  }
+const data = await HomeACF();
+const section2 = data?.pageBy?.homeSection2Repetible?.homeSection2;
 
-  renderContent();
-</script>
+---
 
 <div class="content">
   <h2>Section 2</h2>
-
+{ section2 && section2.map((item, index) => (
+  <div class="section-2 box">
+    <img src={item.image.sourceUrl} alt={item.image.title} loading="lazy"/>
+    <p>{item.text}</p>   
+  </div>
+))
+}
 </div>
