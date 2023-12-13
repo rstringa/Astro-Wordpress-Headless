@@ -1,12 +1,6 @@
 ---
 const {slug} = Astro.props 
-
-async function HomeACF() {
-    const HomeACF = await fetch(import.meta.env.WORDPRESS_API_URL, {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        query: `{
+const query = `{
           pageBy(uri:"${slug}") {
             homeSection2Repetible {
               homeSection2 {
@@ -18,7 +12,13 @@ async function HomeACF() {
               }
             }
           }
-              }`,
+              }`
+async function HomeACF() {
+    const HomeACF = await fetch(import.meta.env.WORDPRESS_API_URL, {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: query,
       }),
     });
    
