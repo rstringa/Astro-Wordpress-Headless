@@ -1,6 +1,12 @@
 ---
-const {title, description} = Astro.props;
+const {title, description} = Astro.props
 import Form from "../components/Form.astro"
+
+// Menu Active Item
+const pathname = new URL(Astro.request.url).pathname;
+const currentPath = pathname.slice(1)
+const isBlog = currentPath.includes("blog") && !currentPath.includes("categorias")
+
 ---
 
 <html lang="en">
@@ -17,13 +23,13 @@ import Form from "../components/Form.astro"
 	<body>
 		<main>
 			<nav>
-				<a data-astro-prefetch="hover" href={Astro.url.origin}>Inicio</a>
-				<a data-astro-prefetch="hover" href=`${Astro.url.origin}/blog`>Blog</a>
-				<a data-astro-prefetch="hover" href=`${Astro.url.origin}/blog/categorias/categoria-1`>Blog Categoria 1</a>
-				<a data-astro-prefetch="hover" href=`${Astro.url.origin}/carousel`>Carousel</a>
-				<a data-astro-prefetch="hover" href=`${Astro.url.origin}/pagina-2`>Pagina 2</a>
-				<a data-astro-prefetch="hover" href=`${Astro.url.origin}/acf`>ACF</a>
-				<a data-astro-prefetch="hover" href=`${Astro.url.origin}/contacto`>Contacto</a>
+				<a class={currentPath === "" ? "active" : ""} data-astro-prefetch="hover" href={Astro.url.origin}>Inicio</a>
+				<a class={isBlog ? "active" : ""} data-astro-prefetch="hover" href=`${Astro.url.origin}/blog`>Blog</a>
+				<a class={currentPath === "blog/categorias/categoria-1" ? "active" : ""} data-astro-prefetch="hover" href=`${Astro.url.origin}/blog/categorias/categoria-1`>Blog Categoria 1</a>
+				<a class={currentPath === "carousel" ? "active" : ""} data-astro-prefetch="hover" href=`${Astro.url.origin}/carousel`>Carousel</a>
+				<a class={currentPath === "pagina-2" ? "active" : ""}data-astro-prefetch="hover" href=`${Astro.url.origin}/pagina-2`>Pagina 2</a>
+				<a class={currentPath === "acf" ? "active" : ""} data-astro-prefetch="hover" href=`${Astro.url.origin}/acf`>ACF</a>
+				<a class={currentPath === "contacto" ? "active" : ""} data-astro-prefetch="hover" href=`${Astro.url.origin}/contacto`>Contacto</a>
 			</nav>
 			<Form />
 			<slot></slot>
@@ -47,5 +53,8 @@ import Form from "../components/Form.astro"
 	}
 	nav a {
 		margin:5px 15px;
+		&.active {
+			font-weight: bold;
+		}
 	}
 </style>
