@@ -1,0 +1,45 @@
+---
+
+const resend = import.meta.env.RESEND_API_KEY
+
+---
+
+<form id="myForm">
+    <label for="name">Nombre:</label>
+    <input type="text" id="name" name="name" >
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" >
+    <input type="submit" value="Enviar" class="btn-send">
+</form>
+
+<script>
+const myForm = document.getElementById('myForm') as HTMLFormElement;
+myForm.addEventListener("submit", async(e)=>{
+    e.preventDefault()
+    // Obtener los valores de los campos
+    const name = (document.getElementById('name') as HTMLInputElement).value;
+    const email = (document.getElementById('email') as HTMLInputElement).value;
+
+    const res = await fetch("/api/resendEmailJson", {
+        method:"POST",
+        headers: {
+            "Content-Type" : "application/json",
+        },
+        body : JSON.stringify({
+            from:"d3code-<onboarding@resend.dev>",
+            to:"robertostringa@gmail.com",
+            cco:`${email}`,
+            subject:"Astro Wordpress Test",
+            html:`
+            <p>Enviado por:</p><br>
+            <p>Email: ${email}</p><br>
+            <p>Nombre: ${name}</p><br>
+            `,
+            text:"Formato de texto",
+        }),
+    });
+    const data = await res.json();
+    console.log( data )
+})
+
+</script>

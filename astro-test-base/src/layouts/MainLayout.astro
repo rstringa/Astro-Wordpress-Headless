@@ -30,6 +30,7 @@ const isBlog = currentPath.includes("blog") && !currentPath.includes("categorias
 				<a class={currentPath === "pagina-2" ? "active" : ""}data-astro-prefetch="hover" href=`${Astro.url.origin}/pagina-2`>Pagina 2</a>
 				<a class={currentPath === "acf" ? "active" : ""} data-astro-prefetch="hover" href=`${Astro.url.origin}/acf`>ACF</a>
 				<a class={currentPath === "contacto" ? "active" : ""} data-astro-prefetch="hover" href=`${Astro.url.origin}/contacto`>Contacto</a>
+				<a class={currentPath === "resend" ? "active" : ""} data-astro-prefetch="hover" href=`${Astro.url.origin}/resend-form`>Resend Form</a>
 			</nav>
 			<Form />
 			<slot></slot>
