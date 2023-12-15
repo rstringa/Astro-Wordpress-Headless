@@ -5,7 +5,7 @@ const resend = new Resend(import.meta.env.RESEND_API_KEY);
 
 export const POST: APIRoute = async ({ params, request }) => {
   const body = await request.json();
-  const { to, from, cc, html, subject, text } = body;
+  const { to, from, reply_to, html, subject, text } = body;
 
   if (!to || !from || !html || !subject || !text) {
     return new Response(null, {
@@ -16,7 +16,7 @@ export const POST: APIRoute = async ({ params, request }) => {
 
   const send = await resend.emails.send({
     from,
-    cc,
+    reply_to,
     to,
     subject,
     html,
