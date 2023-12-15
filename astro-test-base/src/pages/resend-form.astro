@@ -1,7 +1,5 @@
 ---
 
-const resend = import.meta.env.RESEND_API_KEY
-
 ---
 
 <form id="myForm">
@@ -13,6 +11,8 @@ const resend = import.meta.env.RESEND_API_KEY
 </form>
 
 <script>
+import { resendTemplate } from "../components/ResendTemplate";
+
 const myForm = document.getElementById('myForm') as HTMLFormElement;
 myForm.addEventListener("submit", async(e)=>{
     e.preventDefault()
@@ -30,16 +30,12 @@ myForm.addEventListener("submit", async(e)=>{
             to:"robertostringa@gmail.com",
             reply_to:`${email}`,
             subject:"Astro Wordpress Test",
-            html:`
-            <p>Enviado por:</p><br>
-            <p>Email: ${email}</p><br>
-            <p>Nombre: ${name}</p><br>
-            `,
+            html:resendTemplate(email, name),
             text:"Formato de texto",
         }),
     });
     const data = await res.json();
-    console.log( data )
+    
 })
 
 </script>
