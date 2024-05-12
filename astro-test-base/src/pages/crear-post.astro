@@ -1,11 +1,70 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
-const href = Astro.url.href; 
+const href = Astro.url.href;
 ---
 
-<MainLayout title='Crear Post' description="Crear un nuevo Post">
-	<section>
-<h1>Crear un nuevo Post</h1>
+<MainLayout title="Crear Post" description="Crear un nuevo Post">
+  <section>
+    <h1>Crear un nuevo Post</h1>
+    <form id="formulario-entrada">
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" name="titulo" required>
 
-</section>
-</MainLayout> 
+        <label for="contenido">Contenido:</label>
+        <textarea id="contenido" name="contenido" rows="5" required></textarea>
+
+        <button type="submit">Crear entrada</button>
+    </form>
+  </section>
+  <button class="js-add-post">Add post</button>
+</MainLayout>
+
+<script>
+    fetch('https://astrowordpress.000webhostapp.com/wp-json/wp/v2/posts').then(function(response){
+        return response.json()
+    }).then(function(posts){
+        console.log(posts)
+    });
+
+    fetch('https://astrowordpress.000webhostapp.com/wp-json/jwt-auth/v1/token',{
+    method: "POST",
+    headers:{
+        'Content-Type': 'application/json',
+        'accept': 'application/json',
+    },
+
+    body:JSON.stringify({
+        username: 'robertostringa@gmail.com',
+        password: 'aideRatt_7'
+    })
+    }).then(function(response){
+        return response.json()
+    }).then(function(user){
+        console.log(user.token)
+        localStorage.setItem('jwt', user.token)
+    });
+
+    function addPost() {
+        fetch('https://astrowordpress.000webhostapp.com/wp-json/wp/v2/posts',{
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'accept': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+            },
+            body:JSON.stringify({
+                title: 'Add posts from the frontend',
+                content: 'This is the way to add posts from your frontend.',
+                status: 'publish'
+            })
+        }).then(function(response){
+            return response.json()
+        }).then(function(post){
+            console.log(post)
+        });
+    }
+
+    const addPostButton = document.querySelector('.js-add-post')
+    addPostButton.addEventListener('click', () => addPost())
+    
+</script>
