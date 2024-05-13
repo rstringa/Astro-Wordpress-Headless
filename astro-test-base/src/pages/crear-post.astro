@@ -1,6 +1,7 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
 const href = Astro.url.href;
+
 ---
 
 <MainLayout title="Crear Post" description="Crear un nuevo Post">
@@ -20,13 +21,15 @@ const href = Astro.url.href;
 </MainLayout>
 
 <script>
-    fetch('https://astrowordpress.000webhostapp.com/wp-json/wp/v2/posts').then(function(response){
+    const PUBLIC_WORDPRESS_URL = import.meta.env.PUBLIC_WORDPRESS_URL;
+   /* fetch(`${PUBLIC_WORDPRESS_URL}wp-json/wp/v2/posts`).then(function(response){
         return response.json()
     }).then(function(posts){
         console.log(posts)
     });
+    */
 
-    fetch('https://astrowordpress.000webhostapp.com/wp-json/jwt-auth/v1/token',{
+    fetch(`${PUBLIC_WORDPRESS_URL}/wp-json/jwt-auth/v1/token`,{
     method: "POST",
     headers:{
         'Content-Type': 'application/json',
@@ -34,18 +37,19 @@ const href = Astro.url.href;
     },
 
     body:JSON.stringify({
-        username: 'robertostringa@gmail.com',
-        password: 'aideRatt_7'
+        username: 'admin',
+        password: 'admin'
     })
     }).then(function(response){
+        
         return response.json()
     }).then(function(user){
-        console.log(user.token)
-        localStorage.setItem('jwt', user.token)
+        // console.log(user.data.token)
+        localStorage.setItem('jwt', user.data.token)
     });
 
     function addPost() {
-        fetch('https://astrowordpress.000webhostapp.com/wp-json/wp/v2/posts',{
+        fetch(`${PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/posts`,{
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
