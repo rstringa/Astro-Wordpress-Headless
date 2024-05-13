@@ -44,7 +44,7 @@ const href = Astro.url.href;
         password: WORDPRESS_PASS  
     })
     }).then(function(response){
-        
+        console.log(response)
         return response.json()
     }).then(function(user){
         // console.log(user.data.token)
