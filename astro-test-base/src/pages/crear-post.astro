@@ -1,7 +1,6 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
 const href = Astro.url.href;
-
 ---
 
 <MainLayout title="Crear Post" description="Crear un nuevo Post">
@@ -21,7 +20,11 @@ const href = Astro.url.href;
 </MainLayout>
 
 <script>
+
     const PUBLIC_WORDPRESS_URL = import.meta.env.PUBLIC_WORDPRESS_URL;
+    const WORDPRESS_USER = import.meta.env.PUBLIC_WORDPRESS_USER;
+    const WORDPRESS_PASS = import.meta.env.PUBLIC_WORDPRESS_PASS;
+
    /* fetch(`${PUBLIC_WORDPRESS_URL}wp-json/wp/v2/posts`).then(function(response){
         return response.json()
     }).then(function(posts){
@@ -37,8 +40,8 @@ const href = Astro.url.href;
     },
 
     body:JSON.stringify({
-        username: 'admin',
-        password: 'admin'
+        username: WORDPRESS_USER,
+        password: WORDPRESS_PASS  
     })
     }).then(function(response){
         
