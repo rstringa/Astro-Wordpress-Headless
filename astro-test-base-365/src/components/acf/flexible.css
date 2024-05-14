@@ -1,0 +1,13 @@
+.flexible-content {
+    background: #ccc;
+    padding: 10px;
+}
+.box {
+    margin-bottom: 20px;
+}
+.flexible-1 {
+    border: 1px solid red;
+}
+.flexible-2 {
+    border: 1px solid blue;
+}

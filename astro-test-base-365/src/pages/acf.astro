@@ -1,0 +1,21 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Section1 from "../components/acf/section-1.astro";
+import Section2 from "../components/acf/section-2.astro";
+import FlexibleACF from "../components/acf/flexible.astro";
+
+---
+
+<MainLayout title='ACF desde WordPress'>
+	<section>
+    <h1>ACF from wordpress</h1>
+        
+        <h2>Contenido ACF Flexible</h2>
+        <FlexibleACF pageId="2"/>
+
+        <h2>Sections</h2>
+        <Section1 slug="pagina-2"/>  
+        <Section2 slug="pagina-2"/>
+
+    </section>
+</MainLayout>    

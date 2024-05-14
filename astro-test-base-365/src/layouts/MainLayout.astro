@@ -2,11 +2,6 @@
 const {title, description} = Astro.props
 import Form from "../components/Form.astro"
 
-// Inicio de Sesion
-import { SignIn, SignOut } from 'auth-astro/components'
-import {getSession} from 'auth-astro/server'
-const session = await getSession(Astro.request)
-
 // Menu Active Item
 const pathname = new URL(Astro.request.url).pathname;
 const currentPath = pathname.slice(1)
@@ -27,15 +22,6 @@ const isBlog = currentPath.includes("blog") && !currentPath.includes("categorias
 	</head>
 	<body>
 		<main>
-			<div class="login">
-				
-    			{session ? (
-					<p>Welcome {session.user?.name}</p>
-					<SignOut>Logout</SignOut>
-				  ) : (
-				   <SignIn provider="google">Login Google</SignIn>
-				  )}
-			</div>
 			<nav>
 				<a class={currentPath === "" ? "active" : ""} data-astro-prefetch="hover" href={Astro.url.origin}>Inicio</a>
 				<a class={isBlog ? "active" : ""} data-astro-prefetch="hover" href=`${Astro.url.origin}/blog`>Blog</a>
@@ -46,9 +32,8 @@ const isBlog = currentPath.includes("blog") && !currentPath.includes("categorias
 				<a class={currentPath === "contacto" ? "active" : ""} data-astro-prefetch="hover" href=`${Astro.url.origin}/contacto`>Contacto</a>
 				<a class={currentPath === "resend" ? "active" : ""} data-astro-prefetch="hover" href=`${Astro.url.origin}/resend-form`>Resend Form</a>
 				<a class={currentPath === "crear-post" ? "active" : ""} data-astro-prefetch="hover" href=`${Astro.url.origin}/crear-post`>Crear Post</a>
-				<!-- <a class={currentPath === "login" ? "active" : ""} data-astro-prefetch="hover" href=`${Astro.url.origin}/login`>Login</a> -->
+				<a class={currentPath === "login" ? "active" : ""} data-astro-prefetch="hover" href=`${Astro.url.origin}/login`>Login</a>
 			</nav>
-
 			<Form />
 			<slot></slot>
 		</main>

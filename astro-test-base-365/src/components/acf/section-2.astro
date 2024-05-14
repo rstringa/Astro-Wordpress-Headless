@@ -1,0 +1,43 @@
+---
+const {slug} = Astro.props 
+const query = `{
+          pageBy(uri:"${slug}") {
+            homeSection2Repetible {
+              homeSection2 {
+                image {
+                  title
+                  sourceUrl
+                }
+                text
+              }
+            }
+          }
+              }`
+async function HomeACF() {
+    const HomeACF = await fetch(import.meta.env.WORDPRESS_API_URL, {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: query,
+      }),
+    });
+   
+  const { data } = await HomeACF.json();
+  return data;
+  }
+
+const data = await HomeACF();
+const section2 = data?.pageBy?.homeSection2Repetible?.homeSection2;
+
+---
+
+<div class="content">
+  <h2>Section 2</h2>
+{ section2 && section2.map((item, index) => (
+  <div class="section-2 box">
+    <img src={item.image.sourceUrl} alt={item.image.title} loading="lazy"/>
+    <p>{item.text}</p>   
+  </div>
+))
+}
+</div>

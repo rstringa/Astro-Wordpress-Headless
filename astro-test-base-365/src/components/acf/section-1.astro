@@ -1,0 +1,48 @@
+---
+const {slug} = Astro.props 
+const query = `{
+        pageBy(uri:"${slug}") {
+          home {
+            text
+            title
+            image {
+              sourceUrl
+            }
+          }
+        }
+      }
+            `
+
+async function HomeACF() {
+  const HomeACF = await fetch(import.meta.env.WORDPRESS_API_URL, {
+    method: "post",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: query,
+    }),
+  });
+  const { data } = await HomeACF.json();
+
+  return data;
+}
+
+const data = await HomeACF();
+
+const section1 = data?.pageBy?.home;
+
+---
+
+<div class="section-1 box">
+  <h2>Section 1</h2>
+  <h2>{section1?.title}</h2>
+  <img src={section1?.image?.sourceUrl} alt={section1?.image?.title} loading="lazy"/>
+  <p>{section1?.text}</p>
+</div>
+
+
+<style>
+/* .section-1 {
+    min-height: 200vh;
+} */
+
+</style>

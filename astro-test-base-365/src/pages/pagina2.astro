@@ -1,0 +1,43 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import FlexibleACF from "../components/acf/flexible.astro";
+export async function Pagina2ACF() {
+  const Pagina2ACF = await fetch(import.meta.env.WORDPRESS_API_URL, {
+    method: "post",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: `{
+        page(id: "12", idType: DATABASE_ID) {
+    page2 {
+      section1 {
+        textoDescripcion
+        titulo
+      }
+    }
+  }
+            }
+            `,
+    }),
+  });
+  const { data } = await Pagina2ACF.json();
+
+  return data;
+}
+
+const data = await Pagina2ACF();
+
+const section1 = data.page.page2.section1;
+---
+
+<MainLayout title='Pagina 2'>
+	<section>
+    <FlexibleACF pageId="2"/>
+    <h1>ACF from wordpress</h1>
+    <div class="section-1 box">
+        <h2>{section1.titulo}</h2>
+        <!-- <img src={section1.image.sourceUrl} alt={section1.image.title} /> -->
+        <div set:html={section1.textoDescripcion} />
+        
+      </div>    
+    </section>
+</MainLayout>    

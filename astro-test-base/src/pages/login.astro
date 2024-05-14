@@ -1,0 +1,55 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+const href = Astro.url.href;
+---
+
+<MainLayout title="Crear Post" description="Crear un nuevo Post">
+  <section>
+    <h1>Iniciar Sesion</h1>
+    <form id="formulario-entrada">
+        <label for="usuario">Usuarion:</label>
+        <input type="text" id="usuario" name="usuario" required>
+
+        <label for="pass">Contraseña:</label>
+        <input type="password"  id="pass" name="pass"required>
+
+        <button type="submit" id="submit">Crear entrada</button>
+    </form>
+  </section>
+
+</MainLayout>
+
+<script>
+const submit = document.getElementById('submit') as HTMLButtonElement;
+
+submit.addEventListener('click', function (event) {
+    event.preventDefault();
+    const usuario = document.getElementById('usuario') as HTMLInputElement;
+    const pass = document.getElementById('pass') as HTMLInputElement;
+    const url = `${import.meta.env.PUBLIC_WORDPRESS_URL}/wp-json/jwt-auth/v1/token`;
+    fetch(url, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'accept': 'application/json',
+        },
+        body: JSON.stringify({
+            username: usuario.value,
+            password: pass.value
+        })
+    }).then(function (response) {
+        //console.log(response)
+         return response.json()
+    }).then(function(user){
+        
+        localStorage.setItem('jwt', user.data.token)
+        //userLoguin(user.data)
+        window.location.href = window.location.href;
+    });
+}
+)
+// function userLoguin(user){
+//     console.log(user)
+// }
+    
+</script>
