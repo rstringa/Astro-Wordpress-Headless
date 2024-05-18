@@ -66,10 +66,12 @@ const isBlog = currentPath.includes("blog") && !currentPath.includes("categorias
 		loginText.textContent = `Hola ${nicename}!`;
 	}	
 const btnLogout = document.querySelector('.logout');
+if(btnLogout){
 btnLogout.addEventListener('click', () => {
 	localStorage.removeItem('jwt');
 	localStorage.removeItem('nicename');
 })
+}
 </script>
 <style>
 	body {
