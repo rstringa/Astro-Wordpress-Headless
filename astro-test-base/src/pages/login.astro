@@ -22,9 +22,9 @@ const href = Astro.url.href;
 
 <script>
 
-const submit = document.getElementById('submit') as HTMLButtonElement;
-
-submit.addEventListener('click', function (event) {
+const form = document.getElementById("formulario-entrada");
+  form.addEventListener("submit", async (event) => {
+   
     event.preventDefault();
     const usuario = document.getElementById('usuario') as HTMLInputElement;
     const pass = document.getElementById('pass') as HTMLInputElement;
@@ -34,6 +34,7 @@ submit.addEventListener('click', function (event) {
         headers: {
             'Content-Type': 'application/json',
             'accept': 'application/json',
+
         },
         body: JSON.stringify({
             username: usuario.value,
