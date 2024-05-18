@@ -3,6 +3,9 @@ import MainLayout from "../layouts/MainLayout.astro";
 import { CustomEndPoint } from './api/custom-endpoint.js';
 const href = Astro.url.href; 
 
+// Icons - astro-icon package
+import { Icon } from 'astro-icon/components';
+
 // Custom Endpoint
 let response = await CustomEndPoint();
 const data = await response.json();
@@ -36,5 +39,10 @@ const data = await response.json();
 		</ul>
 	<h3>Custom Endpoint Data from Astro 3.</h3>
 	<p>{data.greeting}</p>
+
+	<h3>Iconos</h3>
+
+	<Icon name="pin" size={100}/>
+	<Icon name="beer" size={100}/>
   </section>
 </MainLayout>	

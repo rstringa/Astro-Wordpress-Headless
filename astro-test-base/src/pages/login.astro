@@ -2,24 +2,26 @@
 import MainLayout from "../layouts/MainLayout.astro";
 const href = Astro.url.href;
 ---
-
 <MainLayout title="Crear Post" description="Crear un nuevo Post">
   <section>
-    <h1>Iniciar Sesion</h1>
+
+      <h1>Iniciar Sesion</h1>
+    
     <form id="formulario-entrada">
-        <label for="usuario">Usuarion:</label>
+        <label for="usuario">Usuario:</label>
         <input type="text" id="usuario" name="usuario" required>
 
         <label for="pass">Contraseña:</label>
         <input type="password"  id="pass" name="pass"required>
 
-        <button type="submit" id="submit">Crear entrada</button>
+        <button type="submit" id="submit">Iniciar Sesión con Wordpress</button>
     </form>
   </section>
 
 </MainLayout>
 
 <script>
+
 const submit = document.getElementById('submit') as HTMLButtonElement;
 
 submit.addEventListener('click', function (event) {
@@ -43,7 +45,9 @@ submit.addEventListener('click', function (event) {
     }).then(function(user){
         
         localStorage.setItem('jwt', user.data.token)
+        localStorage.setItem('nicename', user.data.nicename)
         //userLoguin(user.data)
+        //console.log( user.data)
         window.location.href = window.location.href;
     });
 }

@@ -7,71 +7,65 @@ const href = Astro.url.href;
   <section>
     <h1>Crear un nuevo Post</h1>
     <form id="formulario-entrada">
-        <label for="titulo">Título:</label>
-        <input type="text" id="titulo" name="titulo" required>
+      <label for="titulo">Título:</label>
+      <input type="text" id="titulo" name="titulo" required />
 
-        <label for="contenido">Contenido:</label>
-        <textarea id="contenido" name="contenido" rows="5" required></textarea>
-
-        <button type="submit">Crear entrada</button>
+      <label for="contenido">Contenido:</label>
+      <textarea id="contenido" name="contenido" rows="5" required></textarea>
+      <div id="post-message"></div>
+      <button type="submit" id="js-add-post">Crar Post</button>
     </form>
   </section>
-  <button class="js-add-post">Add post</button>
 </MainLayout>
 
 <script>
+  const PUBLIC_WORDPRESS_URL = import.meta.env.PUBLIC_WORDPRESS_URL;
+  const WORDPRESS_USER = import.meta.env.PUBLIC_WORDPRESS_USER;
+  const WORDPRESS_PASS = import.meta.env.PUBLIC_WORDPRESS_PASS;
+  const postMessageContainer = document.getElementById("post-message");
 
-    const PUBLIC_WORDPRESS_URL = import.meta.env.PUBLIC_WORDPRESS_URL;
-    const WORDPRESS_USER = import.meta.env.PUBLIC_WORDPRESS_USER;
-    const WORDPRESS_PASS = import.meta.env.PUBLIC_WORDPRESS_PASS;
+  const form = document.getElementById("formulario-entrada");
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault(); // Prevent default form submission
 
-   /* fetch(`${PUBLIC_WORDPRESS_URL}wp-json/wp/v2/posts`).then(function(response){
-        return response.json()
-    }).then(function(posts){
-        console.log(posts)
-    });
-    */
+    try {
+      const response = await fetch(
+        `${PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/posts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            accept: "application/json",
+            Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+          },
+          body: JSON.stringify({
+            title: (document.querySelector("#titulo") as HTMLInputElement)
+              .value,
+            content: (
+              document.querySelector("#contenido") as HTMLTextAreaElement
+            ).value,
+            status: "publish",
+          }),
+        }
+      );
 
-    fetch(`${PUBLIC_WORDPRESS_URL}/wp-json/jwt-auth/v1/token`,{
-    method: "POST",
-    headers:{
-        'Content-Type': 'application/json',
-        'accept': 'application/json',
-    },
-
-    body:JSON.stringify({
-        username: WORDPRESS_USER,
-        password: WORDPRESS_PASS  
-    })
-    }).then(function(response){
-        console.log(response)
-        return response.json()
-    }).then(function(user){
-        // console.log(user.data.token)
-        localStorage.setItem('jwt', user.data.token)
-    });
-
-    function addPost() {
-        fetch(`${PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/posts`,{
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'accept': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-            },
-            body:JSON.stringify({
-                title: 'Add posts from the frontend',
-                content: 'This is the way to add posts from your frontend.',
-                status: 'publish'
-            })
-        }).then(function(response){
-            return response.json()
-        }).then(function(post){
-            console.log(post)
-        });
+      if (response.ok) {
+        const post = await response.json();
+        postMessageContainer.textContent = "Post creado exitosamente!";
+        //showAlert("success", "Post creado exitosamente!"); // Display a success alert (optional)
+      } else {
+        const error = await response.text();
+        // Customize error message based on response
+        postMessageContainer.textContent = error.includes(
+          "Authentication failed"
+        )
+          ? "Debe estar registrado para crear un post"
+          : `Error al crear el post`;
+        // showAlert("error", `Error al crear el post: ${error}`); // Display an error alert (optional)
+      }
+    } catch (error) {
+      postMessageContainer.textContent = `Error inesperado: ${error}`;
+      //showAlert("error", `Error inesperado: ${error}`); // Display an error alert (optional)
     }
-
-    const addPostButton = document.querySelector('.js-add-post')
-    addPostButton.addEventListener('click', () => addPost())
-    
+  });
 </script>
