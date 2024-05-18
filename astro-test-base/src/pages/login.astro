@@ -31,15 +31,15 @@ const form = document.getElementById("formulario-entrada");
     const url = `${import.meta.env.PUBLIC_WORDPRESS_URL}/wp-json/jwt-auth/v1/token`;
     fetch(url, {
         method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-            'accept': 'application/json',
-
-        },
+        mode: 'no-cors',
         body: JSON.stringify({
             username: usuario.value,
             password: pass.value
-        })
+        }),
+        headers: {
+            'Content-Type': 'application/json',
+            'accept': 'application/json',
+        },
     }).then(function (response) {
         //console.log(response)
          return response.json()
